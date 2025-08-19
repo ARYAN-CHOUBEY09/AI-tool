@@ -1,12 +1,14 @@
 # Quick-Ask AI Chatbot
 
-**Live Demo:** (https://ai-tool-plum.vercel.app/)
+**Live Demo:** [https://ai-tool-plum.vercel.app/](https://ai-tool-plum.vercel.app/)
 
 ---
 
 ## Overview
 
-**Quick-Ask** is a sleek AI-powered chatbot built with React and Tailwind CSS, deployed via Vercel. It lets users ask questions via text or voice and displays beautifully formatted answers—complete with markdown and code support. It also stores recent query history and features a responsive, animated mic button indicating voice input activity.
+**Quick-Ask** is an AI-powered chatbot built with React and Tailwind CSS, deployed via Vercel. It lets users ask questions via text or voice and displays beautifully formatted answers—complete with markdown and code support. It also stores recent query history and features a responsive, animated mic button indicating voice input activity.
+
+⚠️ **Note:** Currently, the project is **not fully responsive**. Some layouts may break on smaller screens.
 
 ---
 
@@ -24,8 +26,8 @@
 * **AI-Powered Responses**
   Answers are fetched using your configured AI backend and rendered with markdown—including code blocks via syntax highlighting.
 
-* **Responsive UI**
-  Designed to adjust seamlessly from mobile to desktop. Only vertical scrolling is used—no horizontal overflow.
+* **Scrolling Layout**
+  Only vertical scrolling is enabled—no horizontal overflow.
 
 ---
 
@@ -40,3 +42,6 @@
 
 ---
 
+
+
+   ```
