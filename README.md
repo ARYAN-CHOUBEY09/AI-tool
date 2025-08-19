@@ -1,12 +1,42 @@
-# React + Vite
+# Quick-Ask AI Chatbot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Demo:** (https://ai-tool-plum.vercel.app/)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## Expanding the ESLint configuration
+**Quick-Ask** is a sleek AI-powered chatbot built with React and Tailwind CSS, deployed via Vercel. It lets users ask questions via text or voice and displays beautifully formatted answers—complete with markdown and code support. It also stores recent query history and features a responsive, animated mic button indicating voice input activity.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Key Features
+
+* **Voice & Text Input**
+  Users can type their questions or click the mic icon—start speaking, and the answer is processed automatically.
+
+* **Animated Mic Indicator**
+  Clicking the mic triggers a visual animation, signaling recording is active—and stops when done.
+
+* **Chat History**
+  Previously asked questions are saved in `localStorage` and appear in a sidebar for quick repeat queries.
+
+* **AI-Powered Responses**
+  Answers are fetched using your configured AI backend and rendered with markdown—including code blocks via syntax highlighting.
+
+* **Responsive UI**
+  Designed to adjust seamlessly from mobile to desktop. Only vertical scrolling is used—no horizontal overflow.
+
+---
+
+## Tech Stack
+
+| Purpose            | Tools/Libraries                       |
+| ------------------ | ------------------------------------- |
+| Frontend Framework | React, Tailwind CSS                   |
+| Voice Recognition  | Web Speech API (`SpeechRecognition`)  |
+| Markdown Rendering | `react-markdown` + custom `CodeBlock` |
+| Deployment         | Vercel                                |
+
+---
+
