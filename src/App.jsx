@@ -15,14 +15,15 @@ export default function App() {
   const scrollToAns = useRef();
   const [loader, setLoader] = useState(false);
 
+ 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
   const [isListening, setIsListening] = useState(false);
 
-
   const startListening = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
     if (!SpeechRecognition) {
       alert("Speech Recognition not supported in this browser!");
       return;
@@ -38,7 +39,6 @@ export default function App() {
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      console.log("Voice Input:", transcript);
       setQuestion(transcript);
     };
 
@@ -53,9 +53,8 @@ export default function App() {
   };
 
   const askQuestion = async () => {
-    if (!question && !selectedHistory) {
-      return false;
-    }
+    if (!question && !selectedHistory) return;
+
     if (question) {
       if (localStorage.getItem("history")) {
         let history = JSON.parse(localStorage.getItem("history"));
@@ -86,8 +85,7 @@ export default function App() {
 
     response = await response.json(response);
     let dataString = response.candidates[0].content.parts[0].text;
-    dataString = dataString.split("* ");
-    dataString = dataString.map((item) => item.trim());
+    dataString = dataString.split("* ").map((item) => item.trim());
 
     setResult([
       ...result,
@@ -116,20 +114,49 @@ export default function App() {
   }, [selectedHistory]);
 
   return (
-    <div className="grid grid-cols-5 text-center h-screen overflow-hidden">
-      <RecentSearch
-        recentHistory={recentHistory}
-        setRecentHistory={setRecentHistory}
-        setSelectedHistory={setSelectedHistory}
-      />
+    <div className="flex h-screen overflow-hidden bg-zinc-950 text-white">
+   
+      <div
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-zinc-900 transform transition-transform duration-300 ease-in-out 
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+        lg:relative lg:translate-x-0`}
+      >
+        <div className="lg:hidden flex justify-end p-2">
+          <button
+            className="text-gray-300 text-2xl"
+            onClick={() => setIsSidebarOpen(false)}
+          >
+            ✕
+          </button>
+        </div>
 
-      <div className="col-span-4 p-10 h-screen flex flex-col">
-        <h1 className="text-4xl leading-normal bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-pink-500 mb-13">
-          Hello User , Ask Me <br /> Anything
-        </h1>
+        <RecentSearch
+          recentHistory={recentHistory}
+          setRecentHistory={setRecentHistory}
+          setSelectedHistory={setSelectedHistory}
+        />
+      </div>
 
-        {loader ? (
-          <div role="status">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col p-4 lg:p-10">
+        {/* Header with Hamburger */}
+        <div className="flex items-center justify-between mb-6">
+          {/* Hamburger (mobile only) */}
+          <button
+            className="lg:hidden text-gray-300 text-3xl"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          >
+            ☰
+          </button>
+
+          <h1 className="text-3xl lg:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-pink-500">
+            Hello User, Ask Me <br /> Anything
+          </h1>
+        </div>
+
+  
+        {loader && (
+          <div role="status" className="m-auto">
             <svg
               aria-hidden="true"
               className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600"
@@ -146,29 +173,28 @@ export default function App() {
                 fill="currentFill"
               />
             </svg>
-            <span className="sr-only">Loading...</span>
           </div>
-        ) : null}
+        )}
 
+        {/* Chat Section */}
         <div
           ref={scrollToAns}
-          className="container h-110 overflow-y-auto custom-scrollbar m-10"
+          className="flex-1 overflow-y-auto custom-scrollbar mb-4"
         >
-          <div className="text-white">
-            <ul>
-              {result.map((item, index) => (
-                <QuestionAnswer
-                  key={index}
-                  item={item}
-                  index={index}
-                  result={result}
-                />
-              ))}
-            </ul>
-          </div>
+          <ul>
+            {result.map((item, index) => (
+              <QuestionAnswer
+                key={index}
+                item={item}
+                index={index}
+                result={result}
+              />
+            ))}
+          </ul>
         </div>
 
-        <div className="bg-zinc-900 w-1/2 p-2 pr-5 text-white m-auto rounded-4xl border-zinc-700 h-16 flex items-center space-x-3">
+        {/* Input Section */}
+        <div className="bg-zinc-900 w-full lg:w-1/2 p-2 pr-5 text-white m-auto rounded-4xl border border-zinc-700 h-16 flex items-center space-x-3">
           <input
             onKeyDown={isEnter}
             value={question}
@@ -177,14 +203,13 @@ export default function App() {
             className="w-full h-full p-3 outline-none"
             placeholder="Ask Me Anything"
           />
-
-          <button onClick={askQuestion} className=" cursor-pointer px-3">
+          <button onClick={askQuestion} className="px-3">
             Ask
           </button>
 
           <div className="relative">
             <svg
-              className={`cursor-pointer p-1 transition-all ${
+              className={`cursor-pointer transition-all ${
                 isListening ? "animate-ping text-red-500" : ""
               }`}
               onClick={startListening}
